@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Worm Game</title>
+</head>
+<body>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.12.0/p5.min.js"></script>
+  <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var worm = {
+      x: 100,
+      y: 100,
+      length: 10,
+      direction: "right"
+    };
+    var food = {
+      x: Math.floor(Math.random() * canvas.width),
+      y: Math.floor(Math.random() * canvas.height)
+    };
+    var score = 0;
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "black";
+      ctx.fillRect(worm.x, worm.y, worm.length, worm.length);
+      ctx.fillStyle = "red";
+      ctx.fillRect(food.x, food.y, 10, 10);
+      ctx.fillStyle = "white";
+      ctx.fillText(score, 10, 30);
+    }
+
+    function keyPressed() {
+      if (keyCode === 37) {
+        worm.direction = "left";
+      } else if (keyCode === 38) {
+        worm.direction = "up";
+      } else if (keyCode === 39) {
+        worm.direction = "right";
+      } else if (keyCode === 40) {
+        worm.direction = "down";
+      }
+    }
+
+    window.addEventListener("keydown", keyPressed);
+
+    function update() {
+      switch (worm.direction) {
+        case "left":
+          worm.x -= 10;
+          break;
+        case "up":
+          worm.y -= 10;
+          break;
+        case "right":
+          worm.x += 10;
+          break;
+        case "down":
+          worm.y += 10;
+          break;
+      }
+      if (worm.x < 0 || worm.x >= canvas.width) {
+        worm.x = Math.min(canvas.width - worm.length, Math.max(0, worm.x));
+      }
+      if (worm.y < 0 || worm.y >= canvas.height) {
+        worm.y = Math.min(canvas.height - worm.length, Math.max(0, worm.y));
+      }
+      if (worm.x === food.x && worm.y === food.y) {
+        score++;
+        food.x = Math.floor(Math.random() * canvas.width);
+        food.y = Math.floor(Math.random() * canvas.height);
+      }
+    }
+
+    requestAnimationFrame(update);
+  </script>
+</body>
+</html>
